@@ -1,0 +1,33 @@
+name: Quality Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'   # cámbialo si usas otra versión
+          channel: 'stable'
+
+      - name: Install dependencies
+        working-directory: SosMascota
+        run: flutter pub get
+
+      - name: Analyze
+        working-directory: SosMascota
+        run: flutter analyze
+
+      - name: Run tests
+        working-directory: SosMascota
+        run: flutter test
